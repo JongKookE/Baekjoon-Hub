@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayDeque;
+import java.util.Arrays;
 import java.util.Deque;
 import java.util.StringTokenizer;
 
@@ -9,59 +10,46 @@ public class Main {
     static int MAX = 100_000;
     static int subin, brother;
     static int[] visited;
-    static Deque<Node> deque = new ArrayDeque<>();
+    static Deque<Integer> deque = new ArrayDeque<>();
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
         subin = Integer.parseInt(st.nextToken());
         brother = Integer.parseInt(st.nextToken());
+        // visited 배열을 boolean이 아닌 int로 해야함
+        // 해당 거리에 왔을때의 최소값을 기록하기 위한 배열
         visited = new int[MAX+1];
-        visited[subin] = 1;
         hideAndSeek();
-        System.out.println(visited[brother]-1);
     }
-
+    // 가중치가 0 또는 1인 0-1bfs
+    // 가중치가 낮은 정점으로의 이동을 높은 우선순위로 해야하기 때문에 addLast가 아닌 addFirst로 큐에 삽입을 한다.
     static void hideAndSeek() {
-        deque.addLast(new Node(subin, 1));
+        deque.addLast(subin);
+        Arrays.fill(visited, -1);
+        visited[subin] = 0;
         while(!deque.isEmpty()){
-            Node node = deque.pollFirst();
-            if(node.loc > MAX) continue;
-            teleport(node);
-            moveForward(node);
-            moveBackward(node);
-        }
-    }
+            int cur = deque.pollFirst();
+            if(cur == brother){
+                System.out.println(visited[brother]);
+                return;
+            }
 
-    static void moveForward(Node node){
-        if(node.loc+1 > MAX) return;
-        if(visited[node.loc+1] == 0 || visited[node.loc+1] > node.time+1) {
-            visited[node.loc + 1] = node.time + 1;
-            deque.addLast(new Node(node.loc + 1, node.time + 1));
-        }
-    }
+            if(cur * 2 <= MAX && visited[cur*2] == -1){
+                // 우선순위가 높기 때문에 큐의 제일 앞에 넣어줌
+                deque.addFirst(cur*2);
+                // 가중치가 0임
+                visited[cur*2] = visited[cur];
+            }
 
-    static void moveBackward(Node node){
-        if(node.loc-1 < 0) return;
-        if(visited[node.loc-1] == 0 || visited[node.loc-1] > node.time+1) {
-            visited[node.loc - 1] = node.time + 1;
-            deque.addLast(new Node(node.loc - 1, node.time + 1));
-        }
-    }
+            if(cur > 0 && visited[cur-1] == -1){
+                deque.addLast(cur-1);
+                visited[cur-1] = visited[cur]+1;
+            }
 
-    static void teleport(Node node){
-        if(node.loc*2 > MAX) return;
-        if(visited[node.loc*2] == 0 || visited[node.loc*2] > node.time) {
-            visited[node.loc * 2] = node.time;
-            deque.addLast(new Node(node.loc * 2, node.time));
-        }
-    }
-
-    static class Node{
-        int loc, time;
-
-        public Node(int loc, int time) {
-            this.loc = loc;
-            this.time = time;
+            if(cur < MAX && visited[cur+1] == -1){
+                deque.addLast(cur+1);
+                visited[cur+1] = visited[cur]+1;
+            }
         }
     }
 }
