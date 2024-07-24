@@ -30,7 +30,7 @@ class Solution {
                 int discountPercentage = src[j];
                 // 유저가 원하는 할인률보다 이모티콘의 할인률이 낮으면 결제하지 않겠다
                 if(canBuyPercentage > discountPercentage) continue;
-                currentCost += emoticonCost * (100 - discountPercentage) / 100;
+                currentCost += (int) (emoticonCost * ((100 - discountPercentage) * 0.01));
             }
             // amount가 canMemberCost보다 크다면 모든 결제를 취소하고 멤버십을 가입한다.
             if(currentCost >= canMemberCost) membershipCnt++;
