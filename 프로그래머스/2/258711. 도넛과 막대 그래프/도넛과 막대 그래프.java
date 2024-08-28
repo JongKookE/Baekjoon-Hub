@@ -1,9 +1,6 @@
 import java.util.*;
 class Solution {
     HashMap<Integer, int[]> inAndOut = new HashMap<>();
-    int startNode;
-    int sticks;
-    int donuts;
     public int[] solution(int[][] edges) {
         int[] answer = new int[4];
         int start = 0;
@@ -19,7 +16,6 @@ class Solution {
             inAndOut.get(in)[1]++;
             inAndOut.get(out)[0]++;
         }
-        // for(int key: inAndOut.keySet()) System.out.println(key + " " + Arrays.toString(inAndOut.get(key)));
         for(int key: inAndOut.keySet()){
             int[] edge = inAndOut.get(key);
             int in = edge[0];
