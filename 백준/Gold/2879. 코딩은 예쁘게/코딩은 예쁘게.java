@@ -4,7 +4,7 @@ import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 public class Main {
-    static int N, result, last;
+    static int N;
     static int[] diff;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -16,12 +16,11 @@ public class Main {
 
         st = new StringTokenizer(br.readLine());
         for(int n = 0; n < N; n++) diff[n] = Integer.parseInt(st.nextToken()) - diff[n];
-        prettier();
-        System.out.println(result);
-
+        System.out.println(prettier());
     }
 
-    static void prettier(){
+    static int prettier(){
+        int result = 0;
         for(int n = 1; n < N; n++){
             int previous = diff[n-1];
             int current = diff[n];
@@ -29,5 +28,6 @@ public class Main {
             else if(Math.abs(previous) >= Math.abs(current)) result += Math.abs(previous) - Math.abs(diff[n]);
         }
         result += Math.abs(diff[N-1]);
+        return result;
     }
 }
