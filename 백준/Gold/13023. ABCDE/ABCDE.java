@@ -44,7 +44,6 @@ public class Main {
         visited[start] = true;
         for(int friend: friends.get(start)){
             if(visited[friend]) continue;
-            visited[start] = true;
             findFriends(friend, depth+1);
             visited[friend] = false;
         }
