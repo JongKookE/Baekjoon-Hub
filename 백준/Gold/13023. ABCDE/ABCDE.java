@@ -14,7 +14,7 @@ public class Main {
         StringTokenizer st = new StringTokenizer(br.readLine());
         node = Integer.parseInt(st.nextToken());
         edge = Integer.parseInt(st.nextToken());
-
+        visited = new boolean[node];
         for(int n = 0; n < node; n++) friends.add(new ArrayList<>());
 
         for(int e = 0; e < edge; e++){
@@ -26,12 +26,12 @@ public class Main {
         }
 
         for(int i = 0; i < node; i++){
-            visited = new boolean[node];
             findFriends(i, 1);
             if(flag) {
                 System.out.println(1);
                 return;
             }
+            visited[i] = false;
         }
         System.out.println(0);
 
