@@ -1,54 +1,52 @@
-import java.util.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 public class Main {
-	static StringBuilder sb = new StringBuilder();
-	static int person, relation, count;
-	static ArrayList<Integer>[] graph;
-	static boolean[] visited;
-	static boolean valid;
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		person = Integer.parseInt(st.nextToken());
-		relation = Integer.parseInt(st.nextToken());
-		graph = new ArrayList[person];
-		visited = new boolean[person];
-		for(int i = 0; i < person; i++) graph[i] = new ArrayList<>(); 
-		
-		for(int i = 0; i < relation; i++) {
-			st = new StringTokenizer(br.readLine());
-			int from = Integer.parseInt(st.nextToken());
-			int to = Integer.parseInt(st.nextToken());
-			graph[from].add(to);
-			graph[to].add(from);
-		}
-		for(int i = 0; i < person; i++) {
-			visited[i] = true;
-			dfs(i, 0); // i 번째 친구로부터 출발해 본다.
-			if(valid) {
-				System.out.println(1);
-				// 메인 메소드 이기 때문에 바로 시스템이 종료됌
-				return;
-			}
-			visited[i] = false; // 관계를 만족하지 못했으므로 visit를 원복
-		}
-		// 모두 실패했다면
-		System.out.println(0);
-	}
-	static void dfs(int start, int depth) {
-		if(valid) return;
-		
-		if(depth == 4) {
-			valid = true;
-			return;
-		}
-		visited[start] = true;
-		for(int forElem : graph[start]) {
-			if(visited[forElem]) continue;
-			visited[forElem] = true;
-			dfs(forElem, depth+1);
-			visited[forElem] = false;
-		}		
-	}
+    static int node, edge;
+    static ArrayList<ArrayList<Integer>> friends = new ArrayList<>();
+    static boolean[] visited;
+    static boolean flag;
+    public static void main(String[] args) throws IOException{
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        node = Integer.parseInt(st.nextToken());
+        edge = Integer.parseInt(st.nextToken());
+
+        for(int n = 0; n < node; n++) friends.add(new ArrayList<>());
+
+        for(int e = 0; e < edge; e++){
+            st = new StringTokenizer(br.readLine());
+            int from = Integer.parseInt(st.nextToken());
+            int to = Integer.parseInt(st.nextToken());
+            friends.get(from).add(to);
+            friends.get(to).add(from);
+        }
+
+        for(int i = 0; i < node; i++){
+            visited = new boolean[node];
+            findFriends(i, 1);
+            if(flag) {
+                System.out.println(1);
+                return;
+            }
+        }
+        System.out.println(0);
+
+    }
+    static void findFriends(int start, int depth){
+        if(depth == 5){
+            flag = true;
+            return;
+        }
+        visited[start] = true;
+        for(int friend: friends.get(start)){
+            if(visited[friend]) continue;
+            visited[start] = true;
+            findFriends(friend, depth+1);
+            visited[friend] = false;
+        }
+    }
 }
