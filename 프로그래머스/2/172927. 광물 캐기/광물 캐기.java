@@ -31,7 +31,6 @@ public class Solution {
             result += node.diamondCount * 25 + node.ironCount * 5 + node.stoneCount;
             picks[2]--;
         }
-        else return 0;
         return result;
 
     }
