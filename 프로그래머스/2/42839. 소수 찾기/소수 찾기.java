@@ -1,4 +1,5 @@
 import java.util.HashSet;
+
 class Solution {
         boolean[] visited = new boolean[7];
         HashSet<Integer> set = new HashSet<>();
