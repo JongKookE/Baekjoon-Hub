@@ -31,14 +31,13 @@ public class Main {
         dq.add(start);
         while(!dq.isEmpty()){
             Node current = dq.pollFirst();
-            if(current.equals(target)){
-                time = current.time;
-                break;
-            }
+
             for(int i = 0; i < 8; i++){
                 int ny = current.y + dy[i];
                 int nx = current.x + dx[i];
+
                 if(!isRange(ny, nx, range, visited)) continue;
+                if(ny == target.y && nx == target.x) return current.time+1;
                 dq.addLast(new Node(ny, nx, current.time+1));
                 visited[ny][nx] = true;
             }
@@ -66,14 +65,5 @@ public class Main {
             this.x = x;
             this.time = time;
         }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            Node node = (Node) o;
-            return y == node.y && x == node.x;
-        }
-
     }
 }
