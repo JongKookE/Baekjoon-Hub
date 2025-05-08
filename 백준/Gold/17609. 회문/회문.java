@@ -24,7 +24,8 @@ public class Main {
                 if (chr[start] == chr[end]) {
                     start++;
                     end--;
-                } else return Math.min(isPalindrome(start + 1, end, depth+1), isPalindrome(start, end - 1, depth+1));
+                }
+                else return Math.min(isPalindrome(start + 1, end, depth+1), isPalindrome(start, end - 1, depth+1));
             }
             return depth;
     }
