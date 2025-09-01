@@ -4,6 +4,7 @@ import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
+import java.util.function.Function;
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -26,18 +27,14 @@ public class Main {
             }
         }
 
-        extractWords(pq, horizonWords);
-        extractWords(pq, verticalWords);
+        extractWords(pq, horizonWords, String::toString);
+        extractWords(pq, verticalWords, StringBuilder::toString);
 
 //        while(!pq.isEmpty()) System.out.println(pq.poll());
         System.out.println(pq.poll());
     }
-    static void extractWords(PriorityQueue<String> pq, String[] words){
-        for(String word : words) insertSplitStr(pq, word);
-    }
-
-    static void extractWords(PriorityQueue<String> pq, StringBuilder[] words){
-        for(StringBuilder word : words) insertSplitStr(pq, word.toString());
+    static <T> void extractWords(PriorityQueue<String> pq, T[] items, Function<T, String> converter){
+        for(T item : items) insertSplitStr(pq, converter.apply(item));
     }
 
     static void insertSplitStr(PriorityQueue<String> pq, String word){
