@@ -24,10 +24,11 @@ public class Main {
             if(o1[2] != o2[2]) return o2[2] - o1[2];
             return o2[3] - o1[3];
         });
+
         int rank = 1;
-        for(int k = 1; k < N-1; k++){
-            if(isEquals(scores[k-1], scores[k])) continue;
-            rank++;
+        for (int i = 0; i < N; i++) {
+            if (i > 0 && !isEquals(scores[i], scores[i - 1])) rank = i + 1;
+            if (scores[i][0] == K) break;
         }
         System.out.println(rank);
     }
