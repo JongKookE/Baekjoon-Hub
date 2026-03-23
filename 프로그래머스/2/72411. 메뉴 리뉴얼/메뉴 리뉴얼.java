@@ -29,7 +29,7 @@ class Solution {
 
             if(count < 2) continue;
 
-            // 요리 count개 코스 일때 가장 많이 선택된 값
+            // 요리 length개 코스 일때 가장 많이 선택된 값
             if (count != maxCountMap.getOrDefault(length, 0)) continue;
             result.add(menu);
         }
@@ -38,7 +38,7 @@ class Solution {
         return result.toArray(new String[0]);
     }
 
-    void comb(char[] chars, int start, int depth, int target, StringBuilder current) {
+    private void comb(char[] chars, int start, int depth, int target, StringBuilder current) {
         if (depth == target) {
             String menu = current.toString();
             int nextCount = countMap.getOrDefault(menu, 0) + 1;
