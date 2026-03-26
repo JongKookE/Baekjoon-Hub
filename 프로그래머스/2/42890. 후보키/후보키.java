@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 
 class Solution {
@@ -5,37 +8,42 @@ class Solution {
         int answer = 0;
         int tupleLength = relation.length;
         int attributeLength = relation[0].length;
-        HashSet<Integer> set = new HashSet<>();
-        comb(0, attributeLength, 0, set);
-        for(int bit : set) {
-            HashSet<String> stringHashSet = setByComb(bit, relation);
-            System.out.println(stringHashSet);
 
+        ArrayList<Integer> uniqueKey = new ArrayList<>();
+
+        for(int currentBit = 1; currentBit <= (1 << attributeLength)-1; currentBit++){
+            HashSet<String> set = buildSelectedBitSet(relation, currentBit, attributeLength);
+            if(set.size() == tupleLength) uniqueKey.add(currentBit);
         }
-        return answer;
+
+        uniqueKey.sort(Comparator.comparingInt(Integer::bitCount));
+        ArrayList<Integer> candidateKey = new ArrayList<>();
+        for(int bit : uniqueKey){
+            boolean isMinimal = true;
+            for(int key : candidateKey){
+                if((key & bit) == key){
+                    isMinimal = false;
+                    break;
+                }
+            }
+            if(isMinimal) candidateKey.add(bit);
+        }
+
+        return candidateKey.size();
     }
 
-    HashSet<String> setByComb(int bit, String[][] relation){
+    HashSet<String> buildSelectedBitSet(String[][] relation, int currentBit, int attributeLength){
         HashSet<String> set = new HashSet<>();
-        for(String[] relationArray : relation){
+        for(String[] rel : relation){
             StringBuilder sb = new StringBuilder();
-            sb.append("(");
-            for(int j = 0; j < relationArray.length; j++){
-                if((bit & 1 << j) == 0) continue;
-                sb.append(relationArray[j]).append(",");
+            for(int j = 0; j < attributeLength; j++){
+                // ex) currentBit = 1010, 1 << j == 0100 -> OR 연산을 했을때 0이 나온다면 현재 조합의 bit를 선택하지 않았기 때문에 스킵
+                if((currentBit & (1 << j)) == 0) continue;
+                sb.append(rel[j]).append(" ");
             }
             sb.deleteCharAt(sb.length()-1);
-            sb.append(")");
             set.add(sb.toString());
         }
         return set;
-    }
-
-    void comb(int start, int attributeLength, int bit, HashSet<Integer> set){
-        for(int i = start; i < attributeLength; i++){
-            int nextBit = bit | (1 << i);
-            set.add(nextBit);
-            comb(i + 1, attributeLength, nextBit, set);
-        }
     }
 }
