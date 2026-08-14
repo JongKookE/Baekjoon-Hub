@@ -1,0 +1,14 @@
+SELECT 
+    ID,
+    EMAIL,
+    FIRST_NAME,
+    LAST_NAME
+FROM
+    DEVELOPERS AS D
+WHERE 
+    D.SKILL_CODE & (
+        SELECT BIT_OR(SC.CODE)
+        FROM SKILLCODES AS SC
+        WHERE SC.NAME IN ('Python', 'C#')
+    ) > 0
+ORDER BY D.ID
